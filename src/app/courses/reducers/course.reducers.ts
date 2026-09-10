@@ -10,7 +10,8 @@ export interface CoursesState extends EntityState<Course> {
 
 
 export const adapter = createEntityAdapter<Course>({
-    sortComparer: compareCourses
+    sortComparer: compareCourses,
+    // selectId: course => course.seqNo // Si quisieramos usar seqNo como id, en lugar de id, podemos usar selectId para especificar cómo seleccionar el id de cada curso. Por defecto, NgRx Entity usa la propiedad 'id' de cada entidad como identificador único.
 });
 
 
