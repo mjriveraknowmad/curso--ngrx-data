@@ -6,6 +6,7 @@ import {NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Route
 import { AppState } from './reducers';
 import { authFeatureKey } from './auth/reducers';
 import { AuthActions } from './auth/action-types';
+import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 
 @Component({
     selector: 'app-root',
@@ -18,14 +19,12 @@ export class AppComponent implements OnInit {
     loading = true;
 
     store = inject(Store<AppState>);
-    isLoggedIn$: Observable<boolean> = this.store.pipe(
-      select(authFeatureKey),
-      map(authState => !!authState.user)
-    );
-    isLoggedOut$: Observable<boolean> = this.store.pipe(
-      select(authFeatureKey),
-      map(authState => !authState.user)
-    );
+    // isLoggedIn$: Observable<boolean> = this.store.pipe(
+    //   select(authFeatureKey),
+    //   map(authState => !!authState.user)
+    // );
+    isLoggedIn$: Observable<boolean> = this.store.pipe(select(isLoggedIn));
+    isLoggedOut$: Observable<boolean> = this.store.pipe(select(isLoggedOut));
 
     constructor(private router: Router) {
 
