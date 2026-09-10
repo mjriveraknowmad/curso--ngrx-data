@@ -23,6 +23,7 @@ export const authReducer = createReducer(
   initialAuthState,
 
   on(AuthActions.login, (state, action) => {
+    console.log('[Reducer] login action', action);
     return {
       user: action.user,
     };
