@@ -13,7 +13,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-    router: routerReducer
+    router: routerReducer // Reducer for handling router state
 };
 
 export function logger(reducer:ActionReducer<any>)
