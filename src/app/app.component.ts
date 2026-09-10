@@ -16,7 +16,7 @@ import { isLoggedIn, isLoggedOut } from './auth/auth.selectors';
 })
 export class AppComponent implements OnInit {
 
-    loading = true;
+  loading = true;
 
     store = inject(Store<AppState>);
     // isLoggedIn$: Observable<boolean> = this.store.pipe(
@@ -31,6 +31,10 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+      const user = JSON.parse(localStorage.getItem("user") || "null");
+      if (user) {
+        this.store.dispatch(AuthActions.login({ user }));
+      }
 
       this.router.events.subscribe(event  => {
         switch (true) {
