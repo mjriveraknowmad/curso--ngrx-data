@@ -54,7 +54,15 @@ const routes: Routes = [
         MatListModule,
         MatToolbarModule,
         AuthModule.forRoot(),
-        StoreModule.forRoot(reducers, { metaReducers }),
+        StoreModule.forRoot(reducers, {
+            metaReducers,
+            runtimeChecks : {
+                strictStateImmutability: true, // Asegura que el estado de la aplicación no se pueda mutar directamente, lo que ayuda a mantener la integridad del estado y facilita la depuración.
+                strictActionImmutability: true, // Garantiza que las acciones despachadas no se puedan mutar, promoviendo un flujo de datos predecible y evitando efectos secundarios inesperados.
+                strictActionSerializability: true, // Verifica que las acciones despachadas sean serializables, lo que es importante para la depuración y el registro de acciones, así como para la persistencia del estado.
+                strictStateSerializability:true // Verifica que el estado de la aplicación sea serializable, lo que es importante para la depuración, el registro de acciones y la persistencia del estado.
+            }
+        }),
         EffectsModule.forRoot([]),
         StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
         StoreRouterConnectingModule.forRoot({
