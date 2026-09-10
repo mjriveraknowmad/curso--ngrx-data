@@ -5,7 +5,7 @@ import {CourseActions} from '../action-types';
 
 
 export interface CoursesState extends EntityState<Course> {
-    allCoursesLoaded: boolean
+    allCoursesLoaded: boolean // es un dato extra en el store. El EntityState solo maneja las entidades (ids y entities), pero podemos agregar propiedades adicionales como esta para almacenar información adicional sobre el estado de los cursos.
 }
 
 

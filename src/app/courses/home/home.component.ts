@@ -17,19 +17,14 @@ import { selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectP
   standalone: false,
 })
 export class HomeComponent implements OnInit {
-  promoTotal$?: Observable<number>;
-
-  loading$?: Observable<boolean>;
-
-  beginnerCourses$?: Observable<Course[]>;
-
-  advancedCourses$?: Observable<Course[]>;
-
   store = inject(Store<AppState>);
   courses$ = this.store.select(selectAllCourses).pipe(
     map((entities) => (Object.values(entities) || []).sort(compareCourses)),
     shareReplay(), // Sino se usara shareReplay, cada vez que se suscriba un observable, se haría una nueva petición HTTP (en este caso 4 veces, por: loading, beginnerCourses, advancedCourses, promoTotal)
   );
+  promoTotal$?: Observable<number>;
+  beginnerCourses$?: Observable<Course[]>;
+  advancedCourses$?: Observable<Course[]>;
 
   constructor(
     private dialog: MatDialog,
