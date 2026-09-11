@@ -1,8 +1,9 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output, ViewEncapsulation} from '@angular/core';
 import {Course} from "../model/course";
 import { MatDialog, MatDialogConfig } from "@angular/material/dialog";
 import {EditCourseDialogComponent} from "../edit-course-dialog/edit-course-dialog.component";
 import {defaultDialogConfig} from '../shared/default-dialog-config';
+import { CourseEntityService } from '../services/course-entity.service';
 
 @Component({
     selector: 'courses-card-list',
@@ -17,6 +18,7 @@ export class CoursesCardListComponent implements OnInit {
 
     @Output()
     courseChanged = new EventEmitter();
+    coursesService = inject(CourseEntityService);
 
     constructor(
       private dialog: MatDialog ) {
@@ -42,10 +44,9 @@ export class CoursesCardListComponent implements OnInit {
 
     }
 
-  onDeleteCourse(course:Course) {
-
-
-  }
+    onDeleteCourse(course:Course) {
+      this.coursesService.delete(course); // siendo optimista por defecto, configurado en el entity metadata del courses module (optimisticUpdate: true).
+    }
 
 }
 
