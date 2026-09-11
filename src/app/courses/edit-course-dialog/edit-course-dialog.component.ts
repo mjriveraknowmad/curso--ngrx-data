@@ -1,9 +1,13 @@
-import {Component, Inject} from '@angular/core';
+import {Component, inject, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {Course} from '../model/course';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {CoursesHttpService} from '../services/courses-http.service';
+import { Update } from '@ngrx/entity';
+import { courseUpdated } from '../course.actions';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../reducers';
 
 @Component({
     selector: 'course-dialog',
@@ -13,7 +17,7 @@ import {CoursesHttpService} from '../services/courses-http.service';
 })
 export class EditCourseDialogComponent {
 
-  form: FormGroup;
+  form?: FormGroup;
 
   dialogTitle: string;
 
@@ -21,7 +25,9 @@ export class EditCourseDialogComponent {
 
   mode: 'create' | 'update';
 
-  loading$:Observable<boolean>;
+  loading$?:Observable<boolean>;
+
+  store: Store<AppState> = inject(Store)
 
   constructor(
     private fb: FormBuilder,
@@ -61,13 +67,24 @@ export class EditCourseDialogComponent {
 
     const course: Course = {
       ...this.course,
-      ...this.form.value
+      ...this.form!.value
     };
 
-    this.coursesService.saveCourse(course.id, course)
-      .subscribe(
-        () => this.dialogRef.close()
-      )
+    // el tipo a pasar a courseUpdated, es Update<Course>, que es un tipo genérico de NgRx Entity que representa una actualización parcial de una entidad.
+    // Contiene el id de la entidad a actualizar y los cambios a aplicar. En este caso, estamos creando un objeto update que tiene el id del curso y los cambios del formulario, y luego lo pasamos a la acción courseUpdated para que el reducer pueda actualizar el estado de los cursos en el store.
+    const update: Update<Course> = {
+      id: course.id,
+      changes: course
+    };
+
+    this.store.dispatch(courseUpdated({ update }));
+    this.dialogRef.close();
+
+    // this.coursesService.saveCourse(course.id, course)
+    //   .subscribe(
+    //     () => this.dialogRef.close()
+    //   )
+
 
 
   }
