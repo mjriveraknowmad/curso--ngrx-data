@@ -45,7 +45,11 @@ export class CoursesCardListComponent implements OnInit {
     }
 
     onDeleteCourse(course:Course) {
-      this.coursesService.delete(course); // siendo optimista por defecto, configurado en el entity metadata del courses module (optimisticUpdate: true).
+      this.coursesService.delete(course)
+        .subscribe({
+          next: () => console.log('Course deleted successfully'),
+          error: (err) => console.error('Error deleting course:', err)
+        }); // siendo optimista, porque no esperamos a nada, solo ponemos console.logs
     }
 
 }
