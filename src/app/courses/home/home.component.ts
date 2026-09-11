@@ -9,6 +9,7 @@ import { CoursesHttpService } from "../services/courses-http.service";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
 import { selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectPromoTotal } from "../courses.selectors";
+import { CourseEntityService } from "../services/course-entity.service";
 
 @Component({
   selector: "home",
@@ -17,18 +18,13 @@ import { selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectP
   standalone: false,
 })
 export class HomeComponent implements OnInit {
-  store = inject(Store<AppState>);
-  courses$ = this.store.select(selectAllCourses).pipe(
-    map((entities) => (Object.values(entities) || []).sort(compareCourses)),
-    shareReplay(), // Sino se usara shareReplay, cada vez que se suscriba un observable, se haría una nueva petición HTTP (en este caso 4 veces, por: loading, beginnerCourses, advancedCourses, promoTotal)
-  );
+  coursesService = inject(CourseEntityService);
   promoTotal$?: Observable<number>;
   beginnerCourses$?: Observable<Course[]>;
   advancedCourses$?: Observable<Course[]>;
 
   constructor(
-    private dialog: MatDialog,
-    private coursesHttpService: CoursesHttpService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -36,10 +32,18 @@ export class HomeComponent implements OnInit {
   }
 
   reload() {
-    this.courses$ = this.store.select(selectAllCourses);
-    this.promoTotal$ = this.store.select(selectPromoTotal);
-    this.beginnerCourses$ = this.store.select(selectBeginnerCourses);
-    this.advancedCourses$ = this.store.select(selectAdvancedCourses);
+    this.promoTotal$ = this.coursesService.entities$
+        .pipe(
+            map(courses => courses.filter(course => course.promo).length)
+        );
+    this.beginnerCourses$ = this.coursesService.entities$
+      .pipe(
+        map(courses => courses.filter(course => course.category == 'BEGINNER'))
+      );
+    this.advancedCourses$ = this.coursesService.entities$
+      .pipe(
+        map(courses => courses.filter(course => course.category == 'ADVANCED'))
+      );
   }
 
   onAddCourse() {

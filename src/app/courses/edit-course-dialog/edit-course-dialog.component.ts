@@ -8,6 +8,7 @@ import { Update } from '@ngrx/entity';
 import { courseUpdated } from '../course.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../reducers';
+import { CourseEntityService } from '../services/course-entity.service';
 
 @Component({
     selector: 'course-dialog',
@@ -27,13 +28,12 @@ export class EditCourseDialogComponent {
 
   loading$?:Observable<boolean>;
 
-  store: Store<AppState> = inject(Store)
+  coursesService = inject(CourseEntityService);
 
   constructor(
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<EditCourseDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) data,
-    private coursesService: CoursesHttpService) {
+    @Inject(MAT_DIALOG_DATA) data) {
 
     this.dialogTitle = data.dialogTitle;
     this.course = data.course;
@@ -77,8 +77,14 @@ export class EditCourseDialogComponent {
       changes: course
     };
 
-    this.store.dispatch(courseUpdated({ update }));
-    this.dialogRef.close();
+    if(this.mode == 'update'){
+      this.coursesService.update(course);
+      this.dialogRef.close();
+    }
+
+
+    // this.store.dispatch(courseUpdated({ update }));
+    // this.dialogRef.close();
 
     // this.coursesService.saveCourse(course.id, course)
     //   .subscribe(
