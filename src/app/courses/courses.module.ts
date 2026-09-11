@@ -27,9 +27,6 @@ import {compareCourses, Course} from './model/course';
 
 import {compareLessons, Lesson} from './model/lesson';
 import { CoursesResolver } from './services/courses.resolver';
-import {CoursesEffects} from './courses.effects';
-import { StoreModule } from '@ngrx/store';
-import { coursesReducer } from './reducers/course.reducers';
 import { CourseEntityService } from './services/course-entity.service';
 import {CoursesDataService} from './services/courses-data.service';
 
@@ -80,8 +77,7 @@ const entityMetadata: EntityMetadataMap = {
     MatMomentDateModule,
     ReactiveFormsModule,
     RouterModule.forChild(coursesRoutes),
-    EffectsModule.forFeature([CoursesEffects]),
-    StoreModule.forFeature("courses", coursesReducer)
+    EffectsModule.forFeature([]),
   ],
   declarations: [
     HomeComponent,

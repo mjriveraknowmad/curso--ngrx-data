@@ -8,7 +8,6 @@ import { map, shareReplay, tap } from "rxjs/operators";
 import { CoursesHttpService } from "../services/courses-http.service";
 import { Store } from "@ngrx/store";
 import { AppState } from "../../reducers";
-import { selectAdvancedCourses, selectAllCourses, selectBeginnerCourses, selectPromoTotal } from "../courses.selectors";
 import { CourseEntityService } from "../services/course-entity.service";
 
 @Component({

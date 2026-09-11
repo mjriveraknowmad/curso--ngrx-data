@@ -5,7 +5,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {CoursesHttpService} from '../services/courses-http.service';
 import { Update } from '@ngrx/entity';
-import { courseUpdated } from '../course.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../reducers';
 import { CourseEntityService } from '../services/course-entity.service';
